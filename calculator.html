@@ -1,44 +1,144 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Simple Calculator</title>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Calculator</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body>
-    <h2>Simple Calculator</h2>
-    <input type="number" id="num1" placeholder="Enter first number">
-    <input type="number" id="num2" placeholder="Enter second number"><br><br>
+    <style>
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background-color: #f0f4f8;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
 
-    <button class="calc-btn" data-op="+">Add</button>
-    <button class="calc-btn" data-op="-">Subtract</button>
-    <button class="calc-btn" data-op="*">Multiply</button>
-    <button class="calc-btn" data-op="/">Divide</button>
+      .calculator {
+        background: #fff;
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        width: 300px;
+      }
 
-    <p id="result">Result: </p>
+      .display {
+        width: 100%;
+        height: 50px;
+        font-size: 24px;
+        text-align: right;
+        padding: 10px;
+        border: none;
+        border-radius: 10px;
+        background-color: #f3f3f3;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+      }
+
+      .buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+
+      .btn {
+        padding: 20px;
+        font-size: 18px;
+        border: none;
+        border-radius: 10px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .btn:hover {
+        background-color: #0056b3;
+      }
+
+      .btn.operator {
+        background-color: #28a745;
+      }
+
+      .btn.operator:hover {
+        background-color: #1e7e34;
+      }
+
+      .btn.clear {
+        background-color: #dc3545;
+      }
+
+      .btn.clear:hover {
+        background-color: #a71d2a;
+      }
+
+      .btn.equal {
+        background-color: #ffc107;
+        color: black;
+      }
+
+      .btn.equal:hover {
+        background-color: #e0a800;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calculator">
+      <input type="text" id="display" class="display" disabled />
+      <div class="buttons">
+        <button class="btn clear">C</button>
+        <button class="btn operator" data-op="/">÷</button>
+        <button class="btn operator" data-op="*">×</button>
+        <button class="btn operator" data-op="-">−</button>
+
+        <button class="btn num">7</button>
+        <button class="btn num">8</button>
+        <button class="btn num">9</button>
+        <button class="btn operator" data-op="+">+</button>
+
+        <button class="btn num">4</button>
+        <button class="btn num">5</button>
+        <button class="btn num">6</button>
+        <button class="btn equal">=</button>
+
+        <button class="btn num">1</button>
+        <button class="btn num">2</button>
+        <button class="btn num">3</button>
+        <button class="btn num">0</button>
+        <button class="btn num">.</button>
+      </div>
+    </div>
 
     <script>
-        $(document).ready(function() {
-            $(".calc-btn").click(function() {
-                let a = parseFloat($("#num1").val());
-                let b = parseFloat($("#num2").val());
-                let op = $(this).data("op");
-                let res = 0;
+      $(document).ready(function () {
+        let expression = "";
 
-                if (isNaN(a) || isNaN(b)) {
-                    $("#result").text("Result: Please enter valid numbers");
-                    return;
-                }
-
-                switch(op) {
-                    case '+': res = a + b; break;
-                    case '-': res = a - b; break;
-                    case '*': res = a * b; break;
-                    case '/': res = b !== 0 ? a / b : "Cannot divide by zero"; break;
-                }
-
-                $("#result").text("Result: " + res);
-            });
+        $(".num").click(function () {
+          expression += $(this).text();
+          $("#display").val(expression);
         });
+
+        $(".operator").click(function () {
+          expression += " " + $(this).data("op") + " ";
+          $("#display").val(expression);
+        });
+
+        $(".clear").click(function () {
+          expression = "";
+          $("#display").val("");
+        });
+
+        $(".equal").click(function () {
+          try {
+            const result = eval(expression);
+            $("#display").val(result);
+            expression = result.toString(); // continue from result
+          } catch {
+            $("#display").val("Error");
+            expression = "";
+          }
+        });
+      });
     </script>
-</body>
+  </body>
 </html>
